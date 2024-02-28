@@ -17,6 +17,11 @@ Main (unreleased)
 
 - A new `loki.rules.kubernetes` component that discovers `PrometheusRule` Kubernetes resources and loads them into a Loki Ruler instance. (@EStork09)
 
+### Enhancements
+
+- Improve converter diagnostic output by including a Footer and removing lower
+  level diagnostics when a configuration fails to generate. (@erikbaranowski)
+
 v0.40.0 (2024-02-27)
 --------------------
 
