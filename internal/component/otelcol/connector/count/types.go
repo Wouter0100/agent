@@ -10,5 +10,5 @@ type MetricInfo struct {
 
 type AttributeConfig struct {
 	Key          string `river:"key,attr"`
-	DefaultValue string `river:"default_value"`
+	DefaultValue string `river:"default_value,attr"`
 }
