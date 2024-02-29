@@ -33,6 +33,7 @@ const (
 	ConnectorLogsToTraces
 	ConnectorLogsToMetrics
 	ConnectorLogsToLogs
+	ConnectorAnyToMetrics
 )
 
 // Arguments is an extension of component.Arguments which contains necessary
@@ -190,6 +191,32 @@ func (p *Connector) Update(args component.Arguments) error {
 				return err
 			} else if tracesConnector != nil {
 				components = append(components, tracesConnector)
+			}
+		}
+	case ConnectorAnyToMetrics:
+		if len(next.Traces) > 0 || len(next.Logs) > 0 {
+			return errors.New("this connector can only output metrics")
+		}
+
+		if len(next.Metrics) > 0 {
+			nextMetrics := fanoutconsumer.Metrics(next.Metrics)
+			tracesConnector, err = p.factory.CreateTracesToMetrics(p.ctx, settings, connectorConfig, nextMetrics)
+			if err != nil && !errors.Is(err, otelcomponent.ErrDataTypeIsNotSupported) {
+				return err
+			} else if tracesConnector != nil {
+				components = append(components, tracesConnector)
+			}
+			metricsConnector, err = p.factory.CreateMetricsToMetrics(p.ctx, settings, connectorConfig, nextMetrics)
+			if err != nil && !errors.Is(err, otelcomponent.ErrDataTypeIsNotSupported) {
+				return err
+			} else if metricsConnector != nil {
+				components = append(components, metricsConnector)
+			}
+			logsConnector, err = p.factory.CreateLogsToMetrics(p.ctx, settings, connectorConfig, nextMetrics)
+			if err != nil && !errors.Is(err, otelcomponent.ErrDataTypeIsNotSupported) {
+				return err
+			} else if tracesConnector != nil {
+				components = append(components, logsConnector)
 			}
 		}
 	default:
