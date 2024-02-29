@@ -14,8 +14,8 @@ func init() {
 	component.Register(component.Registration{
 		Name:      "otelcol.connector.count",
 		Stability: featuregate.StabilityExperimental,
-		Args:      nil,
-		Exports:   nil,
+		Args:      Arguments{},
+		Exports:   otelcol.ConsumerExports{},
 		Build: func(opts component.Options, args component.Arguments) (component.Component, error) {
 			fact := countconnector.NewFactory()
 			return connector.New(opts, fact, args.(Arguments))
