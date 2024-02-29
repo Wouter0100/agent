@@ -21,6 +21,8 @@ Main (unreleased)
 
 - Fix an issues where the logging config block would trigger an error when trying to send logs to components that were not running. (@wildum)
 
+- Fix an issue where JSON string array elements were not parsed correctly in `loki.source.cloudflare`. (@thampiotr)
+
 v0.40.0 (2024-02-27)
 --------------------
 
